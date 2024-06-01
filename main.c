@@ -6,11 +6,12 @@
 
 #define MAX_THREADS 20
 
+
 int
 main()
 {
     printf("izvrsio se main\n"); 
-    char directories[MAX_THREADS][50];
+    char directories[MAX_THREADS][MAX_DIRNAME];
     pthread_t scanner_thread[MAX_THREADS];
     int index = 0;
     
