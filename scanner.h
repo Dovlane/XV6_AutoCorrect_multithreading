@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <ctype.h>
+#include "trie.h"
 
 
 #define MAX_WORD_LEN 64
@@ -17,5 +18,5 @@ void* scan(void* );
 
 struct scanner_args {
     char directory[MAX_DIRNAME];
-    void* trie;
+    trie_node* trie;
 };
