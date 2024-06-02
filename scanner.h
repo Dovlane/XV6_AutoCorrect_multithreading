@@ -14,3 +14,8 @@
 #define MAX_DIRNAME 256
 
 void* scan(void* );
+
+struct scanner_args {
+    char directory[MAX_DIRNAME];
+    void* trie;
+};

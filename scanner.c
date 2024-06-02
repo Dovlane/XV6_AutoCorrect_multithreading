@@ -43,7 +43,7 @@ void reading_file(FILE* curr_file) {
             if (index == MAX_WORD_LEN - 1 || issep(c)) {
                 memset(word + index, 0, MAX_WORD_LEN - index);
                 if (index > 0) {
-                    printf("%s %d \n", word, index);
+                    //printf("%s %d \n", word, index);
                 }
                 flag = 0;
                 index = 0;
@@ -84,6 +84,7 @@ void* scan(void* dirname) {
     struct dirent* in_file;
     FILE *curr_file;
 
+    printf("dirname = %s\n", (char*)dirname);
     int index = 0;
 
     if (NULL == (FD = opendir (dirname))) 

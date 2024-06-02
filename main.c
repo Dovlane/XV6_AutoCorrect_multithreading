@@ -5,24 +5,34 @@
 #include "scanner.h"
 
 #define MAX_THREADS 20
-#define LETTERS 26 
 
+struct scanner_args scn_args[MAX_THREADS];
 
 int
 main()
 {
     printf("izvrsio se main\n"); 
-    char directories[MAX_THREADS][MAX_DIRNAME];
     pthread_t scanner_thread[MAX_THREADS];
     int index = 0;
     
     while (1) {
         char command[10];
+        printf("please enter command\n");
         scanf("%s", command);
         if (strcmp(command, "_add_") == 0) {
-            scanf("%s", directories[index]);
-            
-            pthread_create(&scanner_thread[index], NULL, &scan, (void*) &directories[index]);
+            memset(scn_args[index].directory, 0, MAX_DIRNAME);
+            scanf("%s", scn_args[index].directory);
+            struct scanner_args* sa;
+            int alreadyHasThread = 0;
+            for (sa = scn_args; sa < scn_args + index; sa++) {
+                if (strncmp(sa->directory, scn_args[index].directory, MAX_DIRNAME) == 0) {
+                    printf("Directory has already thread on it\n");
+                    alreadyHasThread = 1;
+                }
+            }
+            if (alreadyHasThread)
+                continue;
+            pthread_create(&scanner_thread[index], NULL, &scan, (void*) &scn_args[index].directory);
 
             index++;
         }
