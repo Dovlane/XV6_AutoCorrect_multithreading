@@ -5,6 +5,7 @@
 #include "scanner.h"
 
 #define MAX_THREADS 20
+#define LETTERS 26 
 
 
 int
@@ -22,7 +23,6 @@ main()
             scanf("%s", directories[index]);
             
             pthread_create(&scanner_thread[index], NULL, &scan, (void*) &directories[index]);
-            pthread_join(scanner_thread[index], NULL);
 
             index++;
         }
