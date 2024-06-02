@@ -86,7 +86,12 @@ main()
             break;
         }
         else {
-            printf("prefix = %s\n", curr);
+            //printf("prefix = %s\n", curr);
+            char c;
+            while ((c = getchar()) != EOF) {
+                
+            }
+            clearerr(stdin);
         }
     }
 
