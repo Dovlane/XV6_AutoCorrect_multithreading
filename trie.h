@@ -11,6 +11,6 @@ typedef struct trie_node //cvor unutar trie strukture
 } trie_node;
 
 void trie_add_word(char *word);
-int find_subwords(char* prefix);
+int get_words(char* prefix);
 void free_trie();
 void trie_init();

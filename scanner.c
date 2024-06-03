@@ -1,11 +1,10 @@
 #include "trie.h"
 #include "scanner.h"
 
-//time_t last_time_modified[MAX_FILES_NUM];
-typedef struct scanned_file //datoteka koju je scanner vec skenirao
+typedef struct scanned_file 
 {
-	char file_name[256]; //naziv datoteke
-	time_t mod_time; //vreme poslednje modifikacije datoteke
+	char file_name[256]; 
+	time_t mod_time; 
     int flag;
 } scanned_file;
 

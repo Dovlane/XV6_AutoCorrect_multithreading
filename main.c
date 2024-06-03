@@ -9,12 +9,6 @@
 
 struct scanner_args scn_args[MAX_THREADS];
 
-extern void trie_init();
-
-extern int find_subwrods(char* prefix);
-
-extern void free_trie();
-
 void word_from_line(char* line, int size, int start, int* end, int* last_word) {
     int i;
     *last_word = 0;
@@ -94,7 +88,7 @@ main()
             break;
         }
         else {
-            int count = find_subwords(curr);
+            int count = get_words(curr);
             printf("prefix = %s, count = %d\n", curr, count);
             char c;
             while ((c = getchar()) != EOF) {
