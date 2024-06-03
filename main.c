@@ -2,11 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include "trie.h"
 #include "scanner.h"
 
 #define MAX_THREADS 20
 
 struct scanner_args scn_args[MAX_THREADS];
+
+extern void trie_init();
+
+extern int find_subwrods(char* prefix);
+
+extern void free_trie();
 
 void word_from_line(char* line, int size, int start, int* end, int* last_word) {
     int i;
@@ -30,6 +37,7 @@ int
 main()
 {
     printf("izvrsio se main\n"); 
+    trie_init();
     pthread_t scanner_thread[MAX_THREADS];
     int index = 0;
     
@@ -86,7 +94,8 @@ main()
             break;
         }
         else {
-            //printf("prefix = %s\n", curr);
+            int count = find_subwords(curr);
+            printf("prefix = %s, count = %d\n", curr, count);
             char c;
             while ((c = getchar()) != EOF) {
                 
@@ -94,6 +103,6 @@ main()
             clearerr(stdin);
         }
     }
-
+    free_trie();
     return 0;
 }

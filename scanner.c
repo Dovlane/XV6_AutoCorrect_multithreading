@@ -1,3 +1,4 @@
+#include "trie.h"
 #include "scanner.h"
 
 //time_t last_time_modified[MAX_FILES_NUM];
@@ -10,6 +11,7 @@ typedef struct scanned_file //datoteka koju je scanner vec skenirao
 
 scanned_file scanned_files[MAX_FILES_NUM];
 
+extern void trie_add_word(char *word);
 
 int issep(char c) {
     return c == ' ' || c == '\t' || c == '\n';
@@ -43,6 +45,8 @@ void reading_file(FILE* curr_file) {
             if (index == MAX_WORD_LEN - 1 || issep(c)) {
                 memset(word + index, 0, MAX_WORD_LEN - index);
                 if (index > 0) {
+                    
+                    trie_add_word(word);
                     //printf("%s %d \n", word, index);
                 }
                 flag = 0;
@@ -78,13 +82,14 @@ void reading_file(FILE* curr_file) {
     }
 }
 
-void* scan(void* dirname) {
+void* scan(void* scn_args) {
     
     DIR* FD;
     struct dirent* in_file;
     FILE *curr_file;
 
-    printf("dirname = %s\n", (char*)dirname);
+    char* dirname = ((struct scanner_args*)scn_args)->directory;
+    
     int index = 0;
 
     if (NULL == (FD = opendir (dirname))) 
@@ -92,6 +97,7 @@ void* scan(void* dirname) {
         fprintf(stderr, "Error : Failed to open input directory - %s\n", strerror(errno));
         return NULL;
     }
+    
     while ((in_file = readdir(FD))) 
     {
         if (!strcmp (in_file->d_name, "."))
@@ -101,11 +107,11 @@ void* scan(void* dirname) {
         
         char filepath[MAX_DIRNAME];
         memset(filepath, 0, MAX_DIRNAME);
-        snprintf(filepath, MAX_DIRNAME, "%s/%s", (char*)dirname, in_file->d_name);
+        snprintf(filepath, MAX_DIRNAME, "%s/%s", dirname, in_file->d_name);
 
         struct stat file_stat;
         stat(filepath, &file_stat);
-
+        
         if (S_ISREG(file_stat.st_mode)) {
             curr_file = fopen(filepath, "r");
             
@@ -127,7 +133,7 @@ void* scan(void* dirname) {
             fclose(curr_file);
         }
     }
-
+    
     closedir(FD);
 
     while (1) {
@@ -148,7 +154,7 @@ void* scan(void* dirname) {
           
             char filepath[MAX_DIRNAME];
             memset(filepath, 0, MAX_DIRNAME);
-            snprintf(filepath, MAX_DIRNAME, "%s/%s", (char*)dirname, in_file->d_name);
+            snprintf(filepath, MAX_DIRNAME, "%s/%s", dirname, in_file->d_name);
 
             struct stat file_stat;
             stat(filepath, &file_stat);
