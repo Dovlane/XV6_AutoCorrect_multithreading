@@ -6,7 +6,7 @@
 
 trie_node* trie_root;
 pthread_mutex_t trie_lock[LETTERS];
-char prefix[MAX_WORD_LEN];
+char auto_prefix[MAX_WORD_LEN];
 
 extern search_result auto_result;
 
@@ -56,11 +56,17 @@ static int tp_add_word(trie_node* tp, char* word) {
     return tp_add_word(newtp, word);
 }
 
-int trie_add_word(char *word) {
+void trie_add_word(char *word) {
     pthread_mutex_lock(&trie_lock[*word - 'a']);
-    int res = tp_add_word(trie_root, word);
+    int new_word = tp_add_word(trie_root, word);
+    if (auto_result.words != 0 && new_word) {
+        int len_word = strlen(word);
+        int len_auto_prefix = strlen(auto_prefix);
+        if (strncmp(word, auto_prefix, strlen(auto_prefix)) == 0 && len_word > len_auto_prefix) {
+            printf("%s \n", word);
+        }
+    }
     pthread_mutex_unlock(&trie_lock[*word - 'a']);
-    return res;
 }
 
 static trie_node* find_root(trie_node* tp, char* prefix) {
@@ -74,18 +80,16 @@ static trie_node* find_root(trie_node* tp, char* prefix) {
 
 char traversed_word[MAX_WORD_LEN];
 int traverse_counter = 0;
-char** words;
 
 static void traverse_words(trie_node* tp, int pos) {
-    if (tp->term == 1) {
-        memmove(auto_result.words[traverse_counter++], traversed_word, MAX_WORD_LEN);
-    }
-    
     pos++;
 
     for (int i = 0; i < LETTERS; i++) {
         if (tp->children[i] != 0) {
             traversed_word[pos] = 'a' + i;
+            if (tp->children[i]->term == 1) {
+                memmove(auto_result.words[traverse_counter++], traversed_word, MAX_WORD_LEN);
+            }
             traverse_words(tp->children[i], pos);
             traversed_word[pos] = '\0';
         }
@@ -98,8 +102,10 @@ int get_words(char* prefix) {
     if (tp == 0)
         return -1;
     int n = strlen(prefix);
+    memmove(auto_prefix, prefix, strlen(prefix));
+
     
-    auto_result.result_count = tp->subwords + tp->term;
+    auto_result.result_count = tp->subwords;
     auto_result.words = calloc(auto_result.result_count, sizeof(char*));
     for (int i = 0; i < auto_result.result_count; i++)
         auto_result.words[i] = calloc(MAX_WORD_LEN, sizeof(char));
@@ -113,6 +119,15 @@ int get_words(char* prefix) {
     return auto_result.result_count;
 }
 
+void free_search_results() {
+    for (int i = 0; i < auto_result.result_count; i++) {
+        free(auto_result.words[i]);
+    }
+    free(auto_result.words);
+    auto_result.result_count = 0;
+    auto_result.words = 0;
+    memset(auto_prefix, 0, MAX_WORD_LEN);
+}
 
 
 static void free_trie_node(trie_node* tp) {

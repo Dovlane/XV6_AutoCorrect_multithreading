@@ -101,11 +101,7 @@ main()
                 
             }
             clearerr(stdin);
-            for (int i = 0; i < auto_result.result_count; i++) {
-                free(auto_result.words[i]);
-            }
-            free(auto_result.words);
-            auto_result.result_count = 0;
+            free_search_results();
         }
     }
     free_trie();

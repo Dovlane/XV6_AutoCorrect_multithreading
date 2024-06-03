@@ -45,7 +45,7 @@ void reading_file(FILE* curr_file) {
             if (index == MAX_WORD_LEN - 1 || issep(c)) {
                 memset(word + index, 0, MAX_WORD_LEN - index);
                 if (index > 0) {
-                    int res = trie_add_word(word);
+                    trie_add_word(word);
                     //printf("%s %d %d \n", word, index, res);
                 }
                 memset(word, 0, MAX_WORD_LEN);
@@ -82,7 +82,7 @@ void reading_file(FILE* curr_file) {
         }
     }
     if (word[0] != '\0') {
-        int res = trie_add_word(word);
+        trie_add_word(word);
         //printf("%s %d %d \n", word, index, res);
     }
 }
@@ -138,6 +138,8 @@ void* scan(void* scn_args) {
             fclose(curr_file);
         }
     }
+
+    printf("finished first reading\n");
     
     closedir(FD);
 
