@@ -43,9 +43,7 @@ static void tp_add_word(trie_node* tp, char* word) {
 }
 
 void trie_add_word(char *word) {
-    char tmp_word[MAX_WORD_LEN];
-    memmove(tmp_word, word, MAX_WORD_LEN);
-    tp_add_word(trie_root, tmp_word);
+    tp_add_word(trie_root, word);
 }
 
 static trie_node* find_root(trie_node* tp, char* prefix) {
