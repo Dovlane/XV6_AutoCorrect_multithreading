@@ -10,8 +10,6 @@ typedef struct scanned_file
 
 scanned_file scanned_files[MAX_FILES_NUM];
 
-extern void trie_add_word(char *word);
-
 int issep(char c) {
     return c == ' ' || c == '\t' || c == '\n';
 }
@@ -28,11 +26,14 @@ void reading_file(FILE* curr_file) {
     {
         switch (flag)
         {
+
         case 0:
             if (isalpha(c)) {
                 flag = 1;
+                //printf("char %c\n", c);
             }
             else if (issep(c)){
+                //printf("tab\n");
                 break;
             }
             else {
@@ -44,10 +45,10 @@ void reading_file(FILE* curr_file) {
             if (index == MAX_WORD_LEN - 1 || issep(c)) {
                 memset(word + index, 0, MAX_WORD_LEN - index);
                 if (index > 0) {
-                    
-                    trie_add_word(word);
-                    //printf("%s %d \n", word, index);
+                    int res = trie_add_word(word);
+                    //printf("%s %d %d \n", word, index, res);
                 }
+                memset(word, 0, MAX_WORD_LEN);
                 flag = 0;
                 index = 0;
             }
@@ -58,6 +59,7 @@ void reading_file(FILE* curr_file) {
                 word[index++] = c;
             }
             else {
+                //printf("propala rec %s\n", word);
                 memset(word, 0, MAX_WORD_LEN);
                 ignore_counter = MAX_WORD_LEN - 1 - index;
                 index = 0;
@@ -78,6 +80,10 @@ void reading_file(FILE* curr_file) {
         default:
             break;
         }
+    }
+    if (word[0] != '\0') {
+        int res = trie_add_word(word);
+        //printf("%s %d %d \n", word, index, res);
     }
 }
 
@@ -127,7 +133,7 @@ void* scan(void* scn_args) {
 
             reading_file(curr_file);
             
-            printf("\r");
+            printf("|\r");
 
             fclose(curr_file);
         }

@@ -8,6 +8,8 @@ trie_node* trie_root;
 pthread_mutex_t trie_lock[LETTERS];
 char prefix[MAX_WORD_LEN];
 
+extern search_result auto_result;
+
 static trie_node* create_tree_node(trie_node* parent, char c) {
     trie_node* new_node;
     new_node = calloc(1, sizeof(trie_node));
@@ -29,7 +31,7 @@ void trie_init() {
     }
 }
 
-static void tp_add_word(trie_node* tp, char* word) {
+static int tp_add_word(trie_node* tp, char* word) {
     trie_node *newtp = tp->children[*word - 'a'];
 
     if (newtp == 0) {
@@ -38,20 +40,27 @@ static void tp_add_word(trie_node* tp, char* word) {
     }
     word++;
     if (*word == '\0') {
-        newtp->term = 1;
-        return;
+        int res = 0;
+        if (newtp->term == 0) {
+            newtp->term = 1;
+            res = 1;
+            trie_node* tmp = tp;
+            while (tmp != 0) {
+                tmp->subwords++;
+                tmp = tmp->parent;
+            }
+        }
+        return res;
     }
-    
-    tp->subwords++;
-    newtp->term = 0;    
 
-    tp_add_word(newtp, word);
+    return tp_add_word(newtp, word);
 }
 
-void trie_add_word(char *word) {
+int trie_add_word(char *word) {
     pthread_mutex_lock(&trie_lock[*word - 'a']);
-    tp_add_word(trie_root, word);
+    int res = tp_add_word(trie_root, word);
     pthread_mutex_unlock(&trie_lock[*word - 'a']);
+    return res;
 }
 
 static trie_node* find_root(trie_node* tp, char* prefix) {
@@ -64,10 +73,13 @@ static trie_node* find_root(trie_node* tp, char* prefix) {
 }
 
 char traversed_word[MAX_WORD_LEN];
+int traverse_counter = 0;
+char** words;
 
 static void traverse_words(trie_node* tp, int pos) {
-    if (tp->term == 1)
-        printf("%s \n", traversed_word);
+    if (tp->term == 1) {
+        memmove(auto_result.words[traverse_counter++], traversed_word, MAX_WORD_LEN);
+    }
     
     pos++;
 
@@ -78,19 +90,27 @@ static void traverse_words(trie_node* tp, int pos) {
             traversed_word[pos] = '\0';
         }
     }
-
 }
 
 int get_words(char* prefix) {
+    pthread_mutex_lock(&trie_lock[*prefix - 'a']);
     trie_node* tp = find_root(trie_root, prefix);
     if (tp == 0)
         return -1;
     int n = strlen(prefix);
+    
+    auto_result.result_count = tp->subwords + tp->term;
+    auto_result.words = calloc(auto_result.result_count, sizeof(char*));
+    for (int i = 0; i < auto_result.result_count; i++)
+        auto_result.words[i] = calloc(MAX_WORD_LEN, sizeof(char));
+
     memmove(traversed_word, prefix, n);
     traverse_words(tp, n - 1);
+    pthread_mutex_unlock(&trie_lock[*prefix - 'a']);
+    traverse_counter = 0;
     memset(traversed_word, 0, MAX_WORD_LEN);
     printf("tp->subwords = %d, tp->term = %d \n", tp->subwords, tp->term);
-    return tp->subwords + tp->term;
+    return auto_result.result_count;
 }
 
 

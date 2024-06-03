@@ -9,6 +9,8 @@
 
 struct scanner_args scn_args[MAX_THREADS];
 
+search_result auto_result;
+
 void word_from_line(char* line, int size, int start, int* end, int* last_word) {
     int i;
     *last_word = 0;
@@ -39,6 +41,7 @@ main()
         char command[MAX_WORD_LEN];
         char prev[MAX_WORD_LEN];
         char curr[MAX_WORD_LEN];
+        memset(command, 0, MAX_WORD_LEN);
         memset(prev, 0, MAX_WORD_LEN);
         memset(curr, 0, MAX_WORD_LEN);
 
@@ -89,12 +92,20 @@ main()
         }
         else {
             int count = get_words(curr);
+            for (int i = 0; i < auto_result.result_count; i++) {
+                printf("%s\n", auto_result.words[i]);
+            }
             printf("prefix = %s, count = %d\n", curr, count);
             char c;
             while ((c = getchar()) != EOF) {
                 
             }
             clearerr(stdin);
+            for (int i = 0; i < auto_result.result_count; i++) {
+                free(auto_result.words[i]);
+            }
+            free(auto_result.words);
+            auto_result.result_count = 0;
         }
     }
     free_trie();

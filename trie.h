@@ -10,7 +10,13 @@ typedef struct trie_node //cvor unutar trie strukture
 	struct trie_node *children[LETTERS]; //deca
 } trie_node;
 
-void trie_add_word(char *word);
+int trie_add_word(char *word);
 int get_words(char* prefix);
 void free_trie();
 void trie_init();
+
+typedef struct search_result
+{
+	int result_count;
+	char **words;
+} search_result;
