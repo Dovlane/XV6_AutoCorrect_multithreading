@@ -60,9 +60,11 @@ main()
                 memmove(curr, command + start, end - start);
                 word_counter++;
                 start = end;
-                while (start < MAX_WORD_LEN && command[start] == ' ') {
+                while (start < MAX_WORD_LEN && (command[start] == ' ' || command[start] == '\t')) {
                     start++;
                 }
+                if (start == MAX_WORD_LEN - 1 || command[start] == '\n')
+                    break;
             }
         }
         else {
