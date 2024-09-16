@@ -45,3 +45,10 @@ The root of the structure is typically empty. A word in the trie structure is re
   <img src="images/trie.png" alt="trie" width="300">
 </p>
 
+
+## Demonstration
+
+Demonstration video you can watch here:
+<video controls>
+  <source src="demo.mp4" type="video/mp4">
+</video>
