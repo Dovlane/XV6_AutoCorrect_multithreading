@@ -41,4 +41,7 @@ A trie (or prefix tree) is a structure where each of its nodes contains:
 </ul>
 The root of the structure is typically empty. A word in the trie structure is represented as a sequence of nodes from the root to a leaf, where each subsequent node in the path represents one letter of the word. The following image illustrates a trie containing the words: "be," "bee," "can," "cat," and "cd."
 
-<img src="images/trie.png" alt="trie" width="300">
+<p align="center">
+  <img src="images/trie.png" alt="trie" width="300">
+</p>
+
