@@ -50,6 +50,7 @@ The root of the structure is typically empty. A word in the trie structure is re
 
 Demonstration video you can watch here:
 
-[![Watch the video](https://raw.githubusercontent.com/Dovlane/XV6_AutoCorrect_multithreading/main/images/thumbnail.png)](https://youtu.be/DcSZfUzCRtM)
+https://github.com/user-attachments/assets/38613831-6975-4404-b58f-82409e55a325
+
 
 
