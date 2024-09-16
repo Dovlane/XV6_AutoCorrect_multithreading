@@ -49,6 +49,7 @@ The root of the structure is typically empty. A word in the trie structure is re
 ## Demonstration
 
 Demonstration video you can watch here:
-<video controls>
-  <source src="demo.mp4" type="video/mp4">
-</video>
+
+
+[![Watch the video]
+(https://github.com/Dovlane/XV6_AutoCorrect_multithreading/blob/main/images/thumbnail.png)](https://raw.githubusercontent.com/username/repository/branch/path/to/video.mp4)
