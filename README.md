@@ -50,5 +50,8 @@ The root of the structure is typically empty. A word in the trie structure is re
 
 Demonstration video you can watch here:
 
-[![Watch the video](https://raw.githubusercontent.com/Dovlane/XV6_AutoCorrect_multithreading/main/images/thumbnail.png)](https://github.com/Dovlane/XV6_AutoCorrect_multithreading/blob/main/demo.mp4)
+<a href="https://raw.githubusercontent.com/Dovlane/XV6_AutoCorrect_multithreading/main/demo.mp4">
+  <img src="https://raw.githubusercontent.com/Dovlane/XV6_AutoCorrect_multithreading/main/images/thumbnail.png" alt="Watch the video">
+</a>
+
 
