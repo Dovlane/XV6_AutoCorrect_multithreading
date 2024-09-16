@@ -52,4 +52,4 @@ Demonstration video you can watch here:
 
 
 [![Watch the video]
-(https://github.com/Dovlane/XV6_AutoCorrect_multithreading/blob/main/images/thumbnail.png)](https://raw.githubusercontent.com/username/repository/branch/path/to/video.mp4)
+(https://github.com/Dovlane/XV6_AutoCorrect_multithreading/blob/main/images/thumbnail.png)](https://github.com/Dovlane/XV6_AutoCorrect_multithreading/blob/main/demo.mp4)
